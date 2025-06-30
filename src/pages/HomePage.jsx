@@ -27,33 +27,35 @@ const HomePage = () => {
 
   // Opciones para los filtros
   const jobTypes = [
-    { value: 'full-time', label: 'Tiempo Completo' },
-    { value: 'part-time', label: 'Medio Tiempo' },
-    { value: 'contract', label: 'Por Contrato' },
-    { value: 'freelance', label: 'Freelance' },
-    { value: 'internship', label: 'Práctica' }
+    { value: 'Tiempo Completo', label: 'Tiempo Completo' },
+    { value: 'Medio Tiempo', label: 'Medio Tiempo' },
+    { value: 'Por Horas', label: 'Por Horas' },
+    { value: 'Temporal', label: 'Temporal' },
+    { value: 'Freelance', label: 'Freelance' }
   ];
 
   const experienceLevels = [
-    { value: 'entry', label: 'Principiante' },
-    { value: 'mid', label: 'Intermedio' },
-    { value: 'senior', label: 'Senior' },
-    { value: 'lead', label: 'Líder' }
+    { value: 'Sin experiencia', label: 'Sin experiencia' },
+    { value: '1-2 años', label: '1-2 años' },
+    { value: '3-5 años', label: '3-5 años' },
+    { value: '5+ años', label: '5+ años' },
+    { value: 'Senior', label: 'Senior' }
   ];
 
   const categories = [
-    'Tecnología',
-    'Ventas',
-    'Marketing',
-    'Administración',
-    'Servicio al Cliente',
-    'Finanzas',
-    'Recursos Humanos',
-    'Diseño',
     'Construcción',
-    'Educación',
-    'Salud',
+    'Servicios',
+    'Comercio',
     'Turismo',
+    'Tecnología',
+    'Salud',
+    'Educación',
+    'Agricultura',
+    'Transporte',
+    'Manufactura',
+    'Gastronomía',
+    'Limpieza',
+    'Seguridad',
     'Otros'
   ];
 
@@ -91,32 +93,31 @@ const HomePage = () => {
     // Filtro por búsqueda de texto
     if (searchTerm.trim()) {
       filtered = filtered.filter(job =>
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (job.profiles?.company_name && job.profiles.company_name.toLowerCase().includes(searchTerm.toLowerCase()))
+        (job.title && job.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (job.description && job.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (job.company_name && job.company_name.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
     // Filtro por tipo de trabajo
-    if (selectedJobType) {
+    if (selectedJobType && selectedJobType !== 'all') {
       filtered = filtered.filter(job => job.job_type === selectedJobType);
     }
 
     // Filtro por categoría
-    if (selectedCategory) {
+    if (selectedCategory && selectedCategory !== 'all') {
       filtered = filtered.filter(job => job.category === selectedCategory);
     }
 
     // Filtro por ubicación
     if (selectedLocation) {
       filtered = filtered.filter(job => 
-        job.location.toLowerCase().includes(selectedLocation.toLowerCase())
+        job.location && job.location.toLowerCase().includes(selectedLocation.toLowerCase())
       );
     }
 
     // Filtro por nivel de experiencia
-    if (selectedExperience) {
+    if (selectedExperience && selectedExperience !== 'all') {
       filtered = filtered.filter(job => job.experience_level === selectedExperience);
     }
 
@@ -158,11 +159,11 @@ const HomePage = () => {
   // Contar filtros activos
   const activeFiltersCount = [
     searchTerm,
-    selectedJobType,
-    selectedCategory,
+    selectedJobType && selectedJobType !== 'all' ? selectedJobType : '',
+    selectedCategory && selectedCategory !== 'all' ? selectedCategory : '',
     selectedLocation,
-    selectedExperience,
-    isRemote,
+    selectedExperience && selectedExperience !== 'all' ? selectedExperience : '',
+    isRemote && isRemote !== 'all' ? isRemote : '',
     salaryMin,
     salaryMax
   ].filter(filter => filter).length;
@@ -260,7 +261,7 @@ const HomePage = () => {
                     <SelectValue placeholder="Seleccionar tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos los tipos</SelectItem>
+                    <SelectItem value="all">Todos los tipos</SelectItem>
                     {jobTypes.map(type => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.label}
@@ -280,7 +281,7 @@ const HomePage = () => {
                     <SelectValue placeholder="Seleccionar categoría" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todas las categorías</SelectItem>
+                    <SelectItem value="all">Todas las categorías</SelectItem>
                     {categories.map(category => (
                       <SelectItem key={category} value={category}>
                         {category}
@@ -314,7 +315,7 @@ const HomePage = () => {
                     <SelectValue placeholder="Seleccionar nivel" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos los niveles</SelectItem>
+                    <SelectItem value="all">Todos los niveles</SelectItem>
                     {experienceLevels.map(level => (
                       <SelectItem key={level.value} value={level.value}>
                         {level.label}
@@ -334,7 +335,7 @@ const HomePage = () => {
                     <SelectValue placeholder="Seleccionar modalidad" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todas las modalidades</SelectItem>
+                    <SelectItem value="all">Todas las modalidades</SelectItem>
                     <SelectItem value="true">Remoto</SelectItem>
                     <SelectItem value="false">Presencial</SelectItem>
                   </SelectContent>
