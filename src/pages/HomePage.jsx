@@ -63,7 +63,7 @@ const HomePage = () => {
       try {
         const { data, error } = await supabase
           .from('jobs')
-          .select('*, profiles(company_name)')
+          .select('*')
           .eq('status', 'active')
           .order('created_at', { ascending: false });
 
