@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import logo from '@/SanMateoEmpleos.png';
+import logo from '@/public/SanMateoEmpleos.png'; // Import the logo image
 
 const Header = () => {
   const navigate = useNavigate();
