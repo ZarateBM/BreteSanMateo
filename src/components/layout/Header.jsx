@@ -30,11 +30,8 @@ const Header = () => {
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
           >
-            <Briefcase className="h-8 w-8 text-primary" />
+            <img src="/SanMateoEmpleos.png" alt="Tu Brete San Mateo" className="h-24 w-28" />
           </motion.div>
-          <span className="text-2xl font-bold gradient-text">
-            Tu Brete San Mateo
-          </span>
         </Link>
         <div className="flex items-center gap-2">
           {user ? (

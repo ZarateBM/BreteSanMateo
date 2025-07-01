@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HomePage from '@/pages/HomePage';
+import ForBusinessPage from '@/pages/ForBusinessPage';
 import PostJobPage from '@/pages/PostJobPage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
@@ -39,6 +40,9 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path="/for-business" element={<ForBusinessPage />} />
+            
+            {/* Catch-all route for 404 */}
 
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

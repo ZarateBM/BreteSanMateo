@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import JobApplicationModal from '@/components/JobApplicationModal';
+import { useAuth } from '@/hooks/useAuth';
 import { MapPin, Building, Calendar, Clock, DollarSign, FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const JobCard = ({ job }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user, profile } = useAuth();
+
+  // Las empresas logueadas no deberían ver este componente, pero por seguridad
+  // verificamos que no sea una empresa la que intenta aplicar
+  const isCompany = user && profile;
+  const isOwnJob = user && job.user_id === user.id;
 
   const timeAgo = (date) => {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -77,21 +84,29 @@ const JobCard = ({ job }) => {
 
         </CardContent>
         <CardFooter className="flex-col items-stretch space-y-2">
-          <Button className="w-full" onClick={() => setIsModalOpen(true)}>
-            Aplicar Ahora
-          </Button>
+          {!isCompany ? (
+            <Button className="w-full" onClick={() => setIsModalOpen(true)}>
+              Aplicar Ahora
+            </Button>
+          ) : (
+            <Button className="w-full" disabled variant="outline">
+              {isOwnJob ? 'Es tu publicación' : 'Solo para candidatos'}
+            </Button>
+          )}
           <div className="flex items-center text-xs text-gray-400 justify-center pt-2">
             <Calendar className="h-3 w-3 mr-1" />
             <span>Publicado {timeAgo(job.created_at)}</span>
           </div>
         </CardFooter>
       </Card>
-      <JobApplicationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        jobId={job.id}
-        jobTitle={job.title}
-      />
+      {!isCompany && (
+        <JobApplicationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          jobId={job.id}
+          jobTitle={job.title}
+        />
+      )}
     </>
   );
 };

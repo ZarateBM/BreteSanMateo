@@ -1,15 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/customSupabaseClient';
 import JobCard from '@/components/JobCard';
-import { Loader2, Search, Filter, MapPin, Briefcase, DollarSign, X } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Loader2, Search, Filter, MapPin, Briefcase, DollarSign, X, Users, TrendingUp, Shield, Heart, ArrowRight, CheckCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const { user, profile } = useAuth();
+  
+  // Si el usuario es una empresa logueada, redirigir al dashboard
+  useEffect(() => {
+    if (user && profile) {
+      navigate('/dashboard');
+    }
+  }, [user, profile, navigate]);
+
+  // Si hay un usuario logueado (empresa), no mostrar nada mientras se redirige
+  if (user) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <span className="ml-2">Redirigiendo al dashboard...</span>
+      </div>
+    );
+  }
+
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -403,6 +426,231 @@ const HomePage = () => {
           </div>
         )}
       </motion.div>
+
+      {/* Secciones informativas */}
+      {!loading && (
+        <>
+          {/* Sección de estadísticas */}
+          <motion.section 
+            className="py-16 bg-gradient-to-r from-primary/10 to-green-50 rounded-2xl my-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Conectando Talento en <span className="gradient-text">San Mateo</span>
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Somos la plataforma líder para encontrar oportunidades laborales locales
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <motion.div 
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">500+</h3>
+                <p className="text-gray-600">Personas conectadas</p>
+              </motion.div>
+              
+              <motion.div 
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Briefcase className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">100+</h3>
+                <p className="text-gray-600">Empleos publicados</p>
+              </motion.div>
+              
+              <motion.div 
+                className="text-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <TrendingUp className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">95%</h3>
+                <p className="text-gray-600">Tasa de éxito</p>
+              </motion.div>
+            </div>
+          </motion.section>
+
+          {/* Sección de beneficios para candidatos */}
+          <motion.section 
+            className="py-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                ¿Por qué elegir Tu Brete San Mateo?
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Te ofrecemos las mejores herramientas para encontrar tu trabajo ideal
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardHeader>
+                    <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                      <Search className="h-6 w-6 text-primary" />
+                    </div>
+                    <CardTitle>Búsqueda Inteligente</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">
+                      Encuentra trabajos que se adapten a tu perfil con nuestros filtros avanzados y búsqueda por ubicación.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardHeader>
+                    <div className="bg-green-100 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                      <Shield className="h-6 w-6 text-green-600" />
+                    </div>
+                    <CardTitle>Empresas Verificadas</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">
+                      Trabajamos solo con empresas locales confiables para garantizar oportunidades legítimas.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <CardHeader>
+                    <div className="bg-blue-100 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
+                      <Heart className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <CardTitle>Apoyo Local</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">
+                      Promovemos el crecimiento económico de San Mateo conectando talento local con oportunidades.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+          </motion.section>
+
+          {/* Sección de categorías populares */}
+          <motion.section 
+            className="py-16 bg-gray-50 rounded-2xl"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Categorías Populares
+              </h2>
+              <p className="text-lg text-gray-600">
+                Explora las áreas con más oportunidades de empleo
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {categories.slice(0, 6).map((category, index) => (
+                <motion.div
+                  key={category}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white rounded-lg p-4 text-center hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setShowFilters(true);
+                  }}
+                >
+                  <div className="text-2xl mb-2">
+                    {category === 'Construcción' && '🏗️'}
+                    {category === 'Servicios' && '⚙️'}
+                    {category === 'Comercio' && '🛍️'}
+                    {category === 'Turismo' && '🏖️'}
+                    {category === 'Tecnología' && '💻'}
+                    {category === 'Salud' && '🏥'}
+                  </div>
+                  <h3 className="font-semibold text-sm text-gray-900">{category}</h3>
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+
+          {/* Call to action para empresas */}
+          <motion.section 
+            className="py-16 bg-gradient-to-r from-primary to-green-600 rounded-2xl text-white my-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                ¿Tienes una empresa?
+              </h2>
+              <p className="text-xl mb-8 max-w-2xl mx-auto">
+                Encuentra el talento que necesitas para hacer crecer tu negocio en San Mateo
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  variant="secondary"
+                  className="bg-white text-primary hover:bg-gray-100"
+                  onClick={() => window.location.href = '/for-business'}
+                >
+                  Conoce más
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              
+              </div>
+            </div>
+          </motion.section>
+        </>
+      )}
     </>
   );
 };
