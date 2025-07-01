@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logo from '@/assets/SanMateoEmpleos.png'; // Import the logo image
 
 const Header = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Header = () => {
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
           >
-            <img src="/SanMateoEmpleos.png" alt="Tu Brete San Mateo" className="h-24 w-28" />
+            <img src={logo} alt="Tu Brete San Mateo" className="h-24 w-28" />
           </motion.div>
         </Link>
         <div className="flex items-center gap-2">
